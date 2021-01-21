@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Call</title>
+    <script
+      src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.0/dist/alpine.min.js"
+      defer
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://unpkg.com/normalize.css@8.0.1/normalize.css"
+    />
+    <style>
+      :root {
+        --font-banner: 90vh;
+        --color-banner: white;
+        --color-background: black;
+      }
+
+      body {
+        background: var(--color-background);
+      }
+
+      .button {
+        border-radius: 35px;
+        height: 60px;
+        padding: 10px 20px;
+        font-size: 30px;
+        margin: 0 4px;
+        background: white;
+      }
+
+      .banner {
+        font-size: var(--font-banner);
+        color: var(--color-banner);
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100vw;
+        height: 100vh;
+        /* animation-name: banner;
+        animation-duration: 2s;
+        animation-timing-function: linear;
+        animation-delay: 0;
+        animation-iteration-count: infinite; */
+
+        overflow-x: visible;
+        z-index: -1;
+      }
+
+      .bannerText {
+        font-size: inherit;
+        color: inherit;
+        padding: 5vh 0;
+        height: var(--font-banner);
+        white-space: nowrap;
+        overflow-x: visible;
+        -webkit-animation: banner 2s linear infinite;
+        animation: banner 2s linear infinite;
+        display: inline-block;
+      }
+
+      .input {
+        font-size: 30px;
+      }
+
+      @keyframes banner {
+        from {
+          transform: translateX(99%);
+        }
+        1% {
+          transform: translateX(100%);
+        }
+        to {
+          transform: translateX(-100%);
+        }
+      }
+
+      .inputContainer {
+        position: fixed;
+        right: 25px;
+        bottom: 25px;
+        background-color: white;
+        border-radius: 5px;
+        padding: 17px 20px;
+      }
+
+      .buttonContainer {
+        position: fixed;
+        top: 25px;
+        left: 25px;
+      }
+    </style>
+    <script>
+      const banner = () => document.querySelector(".bannerText");
+      const setBannerAnimationDuration = (time) => {
+        banner().style.animationDuration = time;
+      };
+      const getBannerLength = () => {
+        return banner().clientWidth;
+      };
+
+      const fullScreen = () => {
+        const elem = document.querySelector(".bannerWrapper");
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        }
+      };
+
+      const updateBannerDuration = () => {
+        setBannerAnimationDuration(getBannerLength() * 2 + "ms");
+      };
+      window.onload = () => {
+        updateBannerDuration();
+      };
+    </script>
+  </head>
+  <body>
+    <div
+      class="textInput"
+      x-data="{ open: false, text: 'Hello from the other side' }"
+    >
+      <div class="bannerWrapper">
+        <div class="banner">
+          <div class="bannerText" x-text="text"></div>
+        </div>
+      </div>
+      <div class="buttonContainer">
+        <button class="button" @click="open = true">Edit</button>
+        <button class="button" @click="fullScreen()">Fullscreen</button>
+      </div>
+      <div
+        x-show="open"
+        @input="updateBannerDuration()"
+        @click.away="open = false"
+        class="inputContainer"
+      >
+        <input class="input" type="text" x-model="text" />
+        <!-- <button @click="submit()">Confirm</button> -->
+      </div>
+    </div>
+  </body>
+</html>
