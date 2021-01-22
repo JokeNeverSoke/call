@@ -91,6 +91,13 @@
       }
     </style>
     <script>
+      const getDefaultBannerText = () => {
+        return (
+          new URLSearchParams(location.search).get("text") ??
+          "Hello from the other side"
+        );
+      };
+      let text = getDefaultBannerText();
       const banner = () => document.querySelector(".bannerText");
       const setBannerAnimationDuration = (time) => {
         banner().style.animationDuration = time;
@@ -98,7 +105,6 @@
       const getBannerLength = () => {
         return banner().clientWidth;
       };
-
       const fullScreen = () => {
         const elem = document.querySelector(".bannerWrapper");
         if (elem.requestFullscreen) {
@@ -107,22 +113,30 @@
           elem.webkitRequestFullscreen();
         }
       };
-
       const updateBannerDuration = () => {
         setBannerAnimationDuration(
           (getBannerLength() + window.innerWidth / 5) * 2 + "ms"
         );
       };
+      const returnURL = () => {
+        if (navigator.clipboard) {
+          navigator.clipboard
+            .writeText(
+              "https://call.jokens.me/?text=" + encodeURIComponent(text)
+            )
+            .then(() => {
+              alert("Copied to clipboard");
+            });
+        }
+      };
+
       window.onload = () => {
         updateBannerDuration();
       };
     </script>
   </head>
   <body>
-    <div
-      class="textInput"
-      x-data="{ open: false, text: 'Hello from the other side' }"
-    >
+    <div class="textInput" x-data="{ open: false }">
       <div class="bannerWrapper">
         <div class="banner">
           <div class="bannerText" x-text="text"></div>
@@ -131,6 +145,7 @@
       <div class="buttonContainer">
         <button class="button" @click="open = true">Edit</button>
         <button class="button" @click="fullScreen()">Fullscreen</button>
+        <button class="button" @click="returnURL()">Copy</button>
       </div>
       <div
         x-show="open"
