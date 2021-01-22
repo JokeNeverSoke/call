@@ -13,7 +13,7 @@
     />
     <style>
       :root {
-        --font-banner: 90vh;
+        --font-banner: 72vh;
         --color-banner: white;
         --color-background: black;
       }
@@ -32,8 +32,6 @@
       }
 
       .banner {
-        font-size: var(--font-banner);
-        color: var(--color-banner);
         position: fixed;
         top: 0;
         right: 0;
@@ -50,9 +48,9 @@
       }
 
       .bannerText {
-        font-size: inherit;
-        color: inherit;
-        padding: 5vh 0;
+        font-size: var(--font-banner);
+        color: var(--color-banner);
+        padding: 14vh 0;
         height: var(--font-banner);
         white-space: nowrap;
         overflow-x: visible;
@@ -111,7 +109,9 @@
       };
 
       const updateBannerDuration = () => {
-        setBannerAnimationDuration(getBannerLength() * 2 + "ms");
+        setBannerAnimationDuration(
+          (getBannerLength() + window.innerWidth / 5) * 2 + "ms"
+        );
       };
       window.onload = () => {
         updateBannerDuration();
